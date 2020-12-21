@@ -1,3 +1,6 @@
+//creates a variable number to the task ID
+var taskIdCounter = 0;
+
 //this assigns buttonEl name to save-task id
  formEl = document.querySelector("#task-form");
  //this assigns tasksToDoEl to the Unordered List
@@ -35,29 +38,102 @@
 }
 
 //function 
-const createTaskEl = (taskDataObj) => {
+var createTaskEl = (taskDataObj) => {
    
      //create list item
-     const listItemEl = document.createElement("li");
+     var listItemEl = document.createElement("li");
      listItemEl.className = "task-item";
  
+     //add "data-task-id" and taskIdCounter as a custom attribute to listItemEl
+     listItemEl.setAttribute("data-task-id", taskIdCounter)
+
      //create div to hold task info and add to list item
-     const taskInfoEl = document.createElement("div");
+     var taskInfoEl = document.createElement("div");
  
      //give it a class name
      taskInfoEl.className = "task-info";
- 
+
+
      //add HTML content to div
      taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskDataObj.name + "</h3><span class = 'task-type'>" + taskDataObj.type + "</span>";
  
      listItemEl.appendChild(taskInfoEl);
- 
+    
+     //this creates the buttons the correspond to the current task list
+     var taskActionsEl = createTaskActions(taskIdCounter);
+     listItemEl.appendChild(taskActionsEl);
      //add entire list item to list
      tasksToDoEl.appendChild(listItemEl);
 
-}
+     //increase task counter for next unique id
+     taskIdCounter++;
 
-//this is a function   event is the function
+};
+
+//function will createTaskActions
+//taskId will pass different id into the function each time
+var createTaskActions = (taskId) => {
+    //creates new <div> for elements below to be stored
+    var actionContainerEl = document.createElement("div");
+    //gives <div> the "task-actions" CSS class
+    actionContainerEl.className = "task-actions";
+    //create edit button
+    var editButtonEl = document.createElement("button");
+   //gives button its name "Edit"
+    editButtonEl.textContent = "Edit";
+    //gives editButtonEl its CSS class
+    editButtonEl.className = "btn edit-btn";
+    //gives the button an attribute of "dataTaskId" and taskId
+    editButtonEl.setAttribute("data-task-id", taskId);
+
+    //this will add the edit button to editButtonEl
+    actionContainerEl.appendChild(editButtonEl);
+
+    //create delete button
+    var deleteButtonEl = document.createElement("button");
+    deleteButtonEl.textContent = "Delete";
+    deleteButtonEl.className = "btn delete-btn";
+    editButtonEl.setAttribute("dataTaskId", taskId);
+
+    actionContainerEl.appendChild(deleteButtonEl);
+
+    //this will add the dropdown box "select"
+    var statusSelectEl = document.createElement("select");
+    //create an array of "status-select" choices
+    var statusChoices = ["To Do", "In Progress", "Completed"]
+
+    //create for loop for the "status-select" choices
+    for ( var i=0; i < statusChoices.length; i++){
+    //create option element
+    var statusOptionEl = document.createElement("option");
+    //this will add the statusChoices to the dropdown list
+    //statusChoices[i] returns value of array to "i" in for loop
+    statusOptionEl.textContent = statusChoices[i];
+    //this will set attribute of statusOptionEl to "value" and statusChoices[i]
+    statusOptionEl.setAttribute("value", statusChoices[i]);
+
+    //this will add statusSelectEl to statusOptionEl dropdown list
+    statusSelectEl.appendChild(statusOptionEl);
+    }
+    
+    //this gives statusSelectEL the CSS class
+    statusSelectEl.className = "select-status";
+    //this gives dropdown the attribute of "status-change"
+    statusSelectEl.setAttribute("name", "status-change");
+    //this gives statusSelectEl the attribute of "data-task-id" taskId number
+    statusSelectEl.setAttribute("data-task-id", taskId);
+
+    //this will add the dropdown info to statusSelectEl
+    actionContainerEl.appendChild(statusSelectEl);
+
+
+    //this returns the editButtonEl and deleteButtonEl values to actionContainer
+    return actionContainerEl;
+};
+
+
+
+//this is a function  'submit' is the function
 formEl.addEventListener('submit', taskFormHandler);
    
 

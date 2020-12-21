@@ -4,36 +4,50 @@
  tasksToDoEl = document.querySelector("#tasks-to-do");
 
  //this function must come before the event listener
- var createTaskHandler = function(event){
+ const taskFormHandler = (event) =>{
    //this will stop browser from refreshing
     event.preventDefault();
     //this line finds the HTML where text is inputted
     const taskNameInput = document.querySelector("input[name='task-name']").value;
     //this finds which dropdown item is selectd from the list
     const taskTypeInput = document.querySelector("select[name='task-type']").value;
-    
-    //create list item
-    const listItemEl = document.createElement("li");
-    listItemEl.className = "task-item";
+       
+    //package up data as an object  
+    const taskDataObj = {
+        name: taskNameInput,
+        type: taskTypeInput
+    };
 
-    //create div to hold task info and add to list item
-    const taskInfoEl = document.createElement("div");
+    //send it as an arugment to createTaskEl
+    //this info isnt availble outside of this function, so it has to be passed to createTaskEl as an argument
+    createTaskEl(taskDataObj);
+}
 
-    //give it a class name
-    taskInfoEl.className = "task-info";
+//function 
+const createTaskEl = (taskDataObj) => {
+   
+     //create list item
+     const listItemEl = document.createElement("li");
+     listItemEl.className = "task-item";
+ 
+     //create div to hold task info and add to list item
+     const taskInfoEl = document.createElement("div");
+ 
+     //give it a class name
+     taskInfoEl.className = "task-info";
+ 
+     //add HTML content to div
+     taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskDataObj.name + "</h3><span class = 'task-type'>" + taskDataObj.type + "</span>";
+ 
+     listItemEl.appendChild(taskInfoEl);
+ 
+     //add entire list item to list
+     tasksToDoEl.appendChild(listItemEl);
 
-    //add HTML content to div
-    taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskNameInput + "</h3><span class = 'task-type'>" + taskTypeInput + "</span>";
-
-    listItemEl.appendChild(taskInfoEl);
-
-    //add entire list item to list
-    tasksToDoEl.appendChild(listItemEl);
-    
 }
 
 //this is a function   event is the function
-formEl.addEventListener('submit', createTaskHandler);
+formEl.addEventListener('submit', taskFormHandler);
    
 
 

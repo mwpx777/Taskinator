@@ -1,16 +1,24 @@
 //this assigns buttonEl name to save-task id
  buttonEl = document.querySelector("#save-task");
+ //this assigns tasksToDoEl to the Unordered List
  tasksToDoEl = document.querySelector("#tasks-to-do");
 
-//this is a function   event is the function
-buttonEl.addEventListener('click', (event)=>{
+ //this function must come before the event listener
+ var createTaskHandler = function(){
     listItemEl = document.createElement("li");
     listItemEl.className = "task-item";
     listItemEl.textContent = "This is a new task";
     tasksToDoEl.appendChild(listItemEl);
-});
+}
+
+//this is a function   event is the function
+buttonEl.addEventListener('click', createTaskHandler);
+   
+;
+
+
 //1 click on button
-//2 li item will be created in list
+//2 li item will be created 
 //3 li item will take on CSS style of task-item
 //4 textContent will add "This is a new task" text 
 //5 appendChild will add listItemEl to end of tasksToDoEl

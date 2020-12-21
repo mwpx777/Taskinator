@@ -11,7 +11,18 @@
     const taskNameInput = document.querySelector("input[name='task-name']").value;
     //this finds which dropdown item is selectd from the list
     const taskTypeInput = document.querySelector("select[name='task-type']").value;
-       
+     
+    //alert if fields are blank
+    //1. if taskNameInput OR taskTypeInput are blank (falsy value || ! 'not' is false value)
+    //2. get alert message
+    //3. return false statement
+    if (!taskNameInput || !taskTypeInput){
+        alert("Please fill out the task form before submitting")
+        return false;
+    }
+
+    //this will reset the form
+    formEl.reset();
     //package up data as an object  
     const taskDataObj = {
         name: taskNameInput,

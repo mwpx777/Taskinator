@@ -14,7 +14,6 @@
 //this is a function   event is the function
 buttonEl.addEventListener('click', createTaskHandler);
    
-;
 
 
 //1 click on button

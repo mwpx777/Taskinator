@@ -2,18 +2,34 @@
 var taskIdCounter = 0;
 
 //this assigns buttonEl name to save-task id
- formEl = document.querySelector("#task-form");
- //this assigns tasksToDoEl to the Unordered List
- tasksToDoEl = document.querySelector("#tasks-to-do");
+var formEl = document.querySelector("#task-form");
+
+//this assigns tasksToDoEl to the Unordered List
+var tasksToDoEl = document.querySelector("#tasks-to-do");
+
+//this assigns pageContentEl to id = "page-content" in HTML.  Event listener for this at bottom of page
+var pageContentEl = document.querySelector("#page-content");
+
+//this is function for ??
+var taskButtonHandler = function(event) {
+    console.log(event.target);
+
+    if (event.target.matches(".delete-btn")){
+        console.log('you clicked a button!');
+        //get the element's task id
+        var taskId = event.target.getAttribute("data-task-id")
+        console.log(taskId);
+    }
+  };
 
  //this function must come before the event listener
- const taskFormHandler = (event) =>{
+var taskFormHandler = (event) =>{
    //this will stop browser from refreshing
     event.preventDefault();
     //this line finds the HTML where text is inputted
-    const taskNameInput = document.querySelector("input[name='task-name']").value;
+    var taskNameInput = document.querySelector("input[name='task-name']").value;
     //this finds which dropdown item is selectd from the list
-    const taskTypeInput = document.querySelector("select[name='task-type']").value;
+   var taskTypeInput = document.querySelector("select[name='task-type']").value;
      
     //alert if fields are blank
     //1. if taskNameInput OR taskTypeInput are blank (falsy value || ! 'not' is false value)
@@ -132,10 +148,12 @@ var createTaskActions = (taskId) => {
 };
 
 
-
 //this is a function  'submit' is the function
 formEl.addEventListener('submit', taskFormHandler);
-   
+
+// for edit and delete buttons
+
+pageContentEl.addEventListener("click", taskButtonHandler);
 
 
 //1 click on button

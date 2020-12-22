@@ -7,6 +7,12 @@ var formEl = document.querySelector("#task-form");
 //this assigns tasksToDoEl to the Unordered List
 var tasksToDoEl = document.querySelector("#tasks-to-do");
 
+//this assigns "Tasks In Progress" section
+var tasksInProgressEl = document.querySelector("#tasks-in-progress");
+
+//this assigsn "Tasks Completed" section
+var tasksCompletedEl = document.querySelector("#tasks-completed");
+
 //this assigns pageContentEl to id = "page-content" in HTML.  Event listener for this at bottom of page
 var pageContentEl = document.querySelector("#page-content");
 
@@ -79,15 +85,72 @@ var taskFormHandler = (event) =>{
     //this will reset the form
     formEl.reset();
     //package up data as an object  
-    const taskDataObj = {
+    var taskDataObj = {
         name: taskNameInput,
         type: taskTypeInput
     };
 
+    //will inform if task is an edited task
+    var isEdit = formEl.hasAttribute("data-task-id");
+
+    // has data attribute, so get task id and call function to complete edit process
+    if(isEdit) {
+        var taskId = formEl.getAttribute("data-task-id");
+        completedEditTask(taskNameInput, taskTypeInput, taskId);
+    }
+    // no data attribute, so create object as normal and pass to createTaskEl function
+    else{
+        var taskDataObj = {
+            name : taskNameInput,
+            type : taskTypeInput
+
+        };
+        createTaskEl(taskDataObj);
+    }
+
     //send it as an arugment to createTaskEl
     //this info isnt availble outside of this function, so it has to be passed to createTaskEl as an argument
-    createTaskEl(taskDataObj);
-}
+    
+}  //this is the end of taskButtonHandler
+
+    //function for "change" event listener will move the task to the correct section
+        var taskStatusChangeHandler = (event) =>{
+           //get the task item's id
+           var taskId = event.target.getAttribute("data-task-id");
+           //get currently selected option's value and convert to lowercase
+           var statusValue = event.target.value.toLowerCase();
+           //find the parent task item element based on the id
+           var taskSelected = document.querySelector(".task-item[data-task-id= '" + taskId + "']"); 
+           
+           //this will change the status of the task to the dropdown value in that task, moving it to another <ul> list
+           if(statusValue === "to do"){
+                tasksToDoEl.appendChild(taskSelected);
+           }
+           else if (statusValue === "in progress") {
+                tasksInProgressEl.appendChild(taskSelected);
+           }
+           else if (statusValue === "completed") {
+                tasksCompletedEl.appendChild(taskSelected);
+           }
+
+           
+        };
+
+//completedEditTask function
+    var completedEditTask = (taskName, taskType, taskId) => {
+        //find the matching task list item
+        var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+
+        //set new values
+        taskSelected.querySelector("h3.task-name").textContent = taskName;
+        taskSelected.querySelector("span.task-type").textContent = taskType;
+
+        alert("Task Updated!");
+
+        //reset the form and "Save Task" button back to "Add Task"
+        formEl.removeAttribute("data-task-id");
+        document.querySelector("#save-task").textContent = "Add Task";
+    }
 
 //function 
 var createTaskEl = (taskDataObj) => {
@@ -190,9 +253,10 @@ var createTaskActions = (taskId) => {
 formEl.addEventListener('submit', taskFormHandler);
 
 // for edit and delete buttons
-
 pageContentEl.addEventListener("click", taskButtonHandler);
 
+//new event listener
+pageContentEl.addEventListener("change" , taskStatusChangeHandler);
 
 //1 click on button
 //2 li item will be created 

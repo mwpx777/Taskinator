@@ -235,7 +235,7 @@ var createTaskActions = (taskId) => {
     statusSelectEl.appendChild(statusOptionEl);
     }
     
-    //this gives statusSelectEL the CSS class
+    //this gives statusSelectEl the CSS class
     statusSelectEl.className = "select-status";
     //this gives dropdown the attribute of "status-change"
     statusSelectEl.setAttribute("name", "status-change");
@@ -261,7 +261,38 @@ var dragTaskHandler = (event)=>{
     //this will log "getId", the id number of the element, and the typeof which is 'string'
     //console.log("getId:" , getId, typeof getId);
 }
-
+//this limits the drop zone to only ".task-list" areas
+ var dropZoneDragHandler = (event) =>{
+     var taskListEl = event.target.closest(".task-list");
+        if (taskListEl){
+            event.preventDefault();
+        }
+ };
+//this function will handle the drop location
+ var dropTaskHandler = (event) =>{
+    //this is retreiving the object id number from dataTransfer using getData
+     var id = event.dataTransfer.getData("text/plain");
+     //searching for task item with data-task-id of 0
+     var draggableElement = document.querySelector("[data-task-id='" + id + "']");
+    //this will find the closest element to task-list
+     var dropZoneEl = event.target.closest(".task-list");
+    //this will get the dropZoneEl id number
+     var statusType = dropZoneEl.id;
+    //set status of task in dropdown based on drop zone id
+    var statusSelectEl = draggableElement.querySelector("select[name='status-change']");
+        //this will assign a value of 0,1,2 to the task option based on where it is dropped
+        if(statusType === "tasks-to-do"){
+            statusSelectEl.selectedIndex = 0;
+        }
+        else if(statusType === "tasks-in-progress"){
+            statusSelectEl.selectedIndex = 1;
+        }
+        else if(statusType ==="tasks-completed"){
+            statusSelectEl.selectedIndex = 2;
+        }
+        //this will append the draggableElement to stay in the new dropZone
+        dropZoneEl.appendChild(draggableElement);
+ };
 
 //this is a function  'submit' is the function
 formEl.addEventListener('submit', taskFormHandler);
@@ -274,6 +305,12 @@ pageContentEl.addEventListener("change" , taskStatusChangeHandler);
 
 //dragstart event listener
 pageContentEl.addEventListener("dragstart", dragTaskHandler);
+
+//dragover event listener
+pageContentEl.addEventListener("dragover", dropZoneDragHandler);
+
+//drop event listener
+pageContentEl.addEventListener("drop", dropTaskHandler);
 
 //1 click on button
 //2 li item will be created 

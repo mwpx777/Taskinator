@@ -155,18 +155,21 @@ var taskFormHandler = (event) =>{
 //function 
 var createTaskEl = (taskDataObj) => {
    
-     //create list item
-     var listItemEl = document.createElement("li");
-     listItemEl.className = "task-item";
+    //create list item
+    var listItemEl = document.createElement("li");
+    listItemEl.className = "task-item";
  
-     //add "data-task-id" and taskIdCounter as a custom attribute to listItemEl
-     listItemEl.setAttribute("data-task-id", taskIdCounter)
+    //add "data-task-id" and taskIdCounter as a custom attribute to listItemEl
+    listItemEl.setAttribute("data-task-id", taskIdCounter);
 
-     //create div to hold task info and add to list item
-     var taskInfoEl = document.createElement("div");
- 
-     //give it a class name
-     taskInfoEl.className = "task-info";
+    //making list item draggable
+    listItemEl.setAttribute("draggable", "true");
+
+    //create div to hold task info and add to list item
+    var taskInfoEl = document.createElement("div");
+
+    //give it a CSS class name
+    taskInfoEl.className = "task-info";
 
 
      //add HTML content to div
@@ -247,6 +250,17 @@ var createTaskActions = (taskId) => {
     return actionContainerEl;
 };
 
+var dragTaskHandler = (event)=>{
+    //getting the data task id value  
+    //the value is stored in dataTransfer
+    var taskId = event.target.getAttribute("data-task-id");
+    //this will store the taskId number in dataTransfer
+    //2 arguments are passed, the format of the value and taskId number 
+    event.dataTransfer.setData("text/plain" , taskId);
+    var getId = event.dataTransfer.getData("text/plain");
+    //this will log "getId", the id number of the element, and the typeof which is 'string'
+    //console.log("getId:" , getId, typeof getId);
+}
 
 
 //this is a function  'submit' is the function
@@ -257,6 +271,9 @@ pageContentEl.addEventListener("click", taskButtonHandler);
 
 //new event listener
 pageContentEl.addEventListener("change" , taskStatusChangeHandler);
+
+//dragstart event listener
+pageContentEl.addEventListener("dragstart", dragTaskHandler);
 
 //1 click on button
 //2 li item will be created 

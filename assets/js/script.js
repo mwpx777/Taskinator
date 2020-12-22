@@ -266,6 +266,8 @@ var dragTaskHandler = (event)=>{
      var taskListEl = event.target.closest(".task-list");
         if (taskListEl){
             event.preventDefault();
+            //this changes the background color of the dropzone
+            taskListEl.setAttribute("style", "background: rgba(68, 233, 255, 0.7); border-style: dashed;");
         }
  };
 //this function will handle the drop location
@@ -292,12 +294,22 @@ var dragTaskHandler = (event)=>{
         }
         //this will append the draggableElement to stay in the new dropZone
         dropZoneEl.appendChild(draggableElement);
+
+    dropZoneEl.removeAttribute("style");
  };
+//this function will remove the hover CSS background color after item is placed in list
+ var dragLeaveHandler = (event) => {
+     var taskListEl = event.target.closest(".task-list");
+     if(taskListEl){
+         taskListEl.removeAttribute("style");
+     }
+     
+ }
 
 //this is a function  'submit' is the function
 formEl.addEventListener('submit', taskFormHandler);
 
-// for edit and delete buttons
+// for edit and delete buttons taskButtonHandler is the callback function
 pageContentEl.addEventListener("click", taskButtonHandler);
 
 //new event listener
@@ -311,6 +323,8 @@ pageContentEl.addEventListener("dragover", dropZoneDragHandler);
 
 //drop event listener
 pageContentEl.addEventListener("drop", dropTaskHandler);
+
+pageContentEl.addEventListener("dragleave", dragLeaveHandler);
 
 //1 click on button
 //2 li item will be created 

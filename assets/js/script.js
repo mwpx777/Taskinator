@@ -10,17 +10,23 @@ var tasksToDoEl = document.querySelector("#tasks-to-do");
 //this assigns pageContentEl to id = "page-content" in HTML.  Event listener for this at bottom of page
 var pageContentEl = document.querySelector("#page-content");
 
-//this is function for ??
+//this is function for ?deleting the task at some point
 var taskButtonHandler = function(event) {
     console.log(event.target);
 
     if (event.target.matches(".delete-btn")){
-        console.log('you clicked a button!');
         //get the element's task id
         var taskId = event.target.getAttribute("data-task-id")
-        console.log(taskId);
+        //this will delete task at some point
+        deleteTask(taskId);
     }
+    
   };
+
+  var deleteTask = (taskId) =>{
+    console.log(taskId);
+};
+
 
  //this function must come before the event listener
 var taskFormHandler = (event) =>{
@@ -146,6 +152,7 @@ var createTaskActions = (taskId) => {
     //this returns the editButtonEl and deleteButtonEl values to actionContainer
     return actionContainerEl;
 };
+
 
 
 //this is a function  'submit' is the function

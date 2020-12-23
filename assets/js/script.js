@@ -40,6 +40,20 @@ var taskButtonHandler = (event) => {
   var deleteTask = (taskId) =>{
     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
     taskSelected.remove();
+    //create new arrya to hold updated list of tasks
+    var updatedTaskArr =[];
+
+    //loop through current tasks
+    for (var i=0; i<tasks.length; i++){
+        //if tasks[i].id doesn't match the value of taskId, lets keep that task and push it into the new array
+        if(tasks[i].id !==parseInt(taskId)){
+            updatedTaskArr.push(tasks[i]);
+        }
+    }
+    //reassign tasks arry to be the same as updatedTaskArr
+    tasks= updatedTaskArr;
+     //this function will save tasks to local storage
+     saveTasks();
 };
 
     //editTaskFunction
@@ -140,7 +154,8 @@ var taskFormHandler = (event) =>{
                 tasks[i].status = statusValue;
                }
            }
-
+            //this function will save tasks to local storage
+            saveTasks();
            
         };
 
@@ -166,6 +181,9 @@ var taskFormHandler = (event) =>{
         //reset the form and "Save Task" button back to "Add Task"
         formEl.removeAttribute("data-task-id");
         document.querySelector("#save-task").textContent = "Add Task";
+
+         //this function will save tasks to local storage
+        saveTasks();
     }
 
 //function 
@@ -205,7 +223,8 @@ var createTaskEl = (taskDataObj) => {
 
      //increase task counter for next unique id
      taskIdCounter++;
-
+    //this function will save tasks to local storage
+    saveTasks();
 };
 
 //function will createTaskActions
@@ -323,7 +342,8 @@ var dragTaskHandler = (event)=>{
                 tasks[i].status = statusSelectEl.value.toLowerCase();
             }
         }
-        console.log(tasks);
+         //this function will save tasks to local storage
+        saveTasks();
  };
 
 
@@ -340,6 +360,13 @@ var dragTaskHandler = (event)=>{
  }
 
  var tasks = [];
+
+//this will save tasks to local storage
+//JSON.stringify will make the tasks appear as a string
+ var saveTasks = function(){
+     localStorage.setItem("tasks", JSON.stringify(tasks));
+
+ }
 
 //this is a function  'submit' is the function
 formEl.addEventListener('submit', taskFormHandler);

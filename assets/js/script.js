@@ -87,7 +87,8 @@ var taskFormHandler = (event) =>{
     //package up data as an object  
     var taskDataObj = {
         name: taskNameInput,
-        type: taskTypeInput
+        type: taskTypeInput,
+        status: "to do"
     };
 
     //will inform if task is an edited task
@@ -102,7 +103,8 @@ var taskFormHandler = (event) =>{
     else{
         var taskDataObj = {
             name : taskNameInput,
-            type : taskTypeInput
+            type : taskTypeInput,
+            status : "to do"
 
         };
         createTaskEl(taskDataObj);
@@ -132,6 +134,12 @@ var taskFormHandler = (event) =>{
            else if (statusValue === "completed") {
                 tasksCompletedEl.appendChild(taskSelected);
            }
+           //this for loop will loop through the tasks and change the statusValue based on taskId number
+           for (var i=0; i<tasks.length; i++){
+               if(tasks[i].id === parseInt(taskId)){
+                tasks[i].status = statusValue;
+               }
+           }
 
            
         };
@@ -146,6 +154,14 @@ var taskFormHandler = (event) =>{
         taskSelected.querySelector("span.task-type").textContent = taskType;
 
         alert("Task Updated!");
+
+        //loop through tasks array and task object with new content
+        for (var i = 0; i < tasks.length; i++) {
+            if (tasks[i].id === parseInt(taskId)) {
+              tasks[i].name = taskName;
+              tasks[i].type = taskType;
+            }
+          };
 
         //reset the form and "Save Task" button back to "Add Task"
         formEl.removeAttribute("data-task-id");
@@ -182,6 +198,10 @@ var createTaskEl = (taskDataObj) => {
      listItemEl.appendChild(taskActionsEl);
      //add entire list item to list
      tasksToDoEl.appendChild(listItemEl);
+    // this will add taskIdCounter as a property to taskDataObj.id
+     taskDataObj.id = taskIdCounter;
+    //this will push the object to the tasks array
+     tasks.push(taskDataObj);
 
      //increase task counter for next unique id
      taskIdCounter++;
@@ -296,7 +316,20 @@ var dragTaskHandler = (event)=>{
         dropZoneEl.appendChild(draggableElement);
 
     dropZoneEl.removeAttribute("style");
+
+        //loop through tasks array to find and update the updated task's status
+        for(var i=0; i<tasks.length; i++){
+            if (tasks[i].id === parseInt(id)){
+                tasks[i].status = statusSelectEl.value.toLowerCase();
+            }
+        }
+        console.log(tasks);
  };
+
+
+
+
+
 //this function will remove the hover CSS background color after item is placed in list
  var dragLeaveHandler = (event) => {
      var taskListEl = event.target.closest(".task-list");
@@ -305,6 +338,8 @@ var dragTaskHandler = (event)=>{
      }
      
  }
+
+ var tasks = [];
 
 //this is a function  'submit' is the function
 formEl.addEventListener('submit', taskFormHandler);
